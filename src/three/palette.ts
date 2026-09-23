@@ -1,0 +1,17 @@
+export const palette = {
+  wallIvory: "#e9dfc8",
+  wallCream: "#ddd0ad",
+  wallCharcoal: "#3a362e",
+  roofCobalt: "#3d5a80",
+  roofCharcoal: "#2b2823",
+  roofOrange: "#b5602f",
+  accentOrange: "#c9713f",
+  accentSage: "#74805f",
+  accentSun: "#f0c688",
+  glass: "#8fa9bd",
+  ground: "#e4d9bd",
+  path: "#c9bd9c",
+  trunk: "#5b4a37",
+  foliage: "#6f7a5e",
+  foliageDark: "#5c6650",
+};

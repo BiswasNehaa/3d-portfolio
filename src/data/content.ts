@@ -2,87 +2,32 @@ export const profile = {
   name: "Neha Biswas",
   role: "AI Engineer",
   roleLine: "RAG & LLM Systems — Final-Year CSE Student",
-  description:
-    "Final-year Computer Science Engineering student specializing in AI Engineering, production RAG systems, and LLM application development.",
+  location: "Bangalore, India",
+  intro:
+    "She builds AI systems — production RAG pipelines, LLM applications — and contributes to open-source projects along the way.",
   email: "itsnehab.official@gmail.com",
   github: "https://github.com/BiswasNehaa",
   linkedin: "https://www.linkedin.com/in/neha-biswas-/",
 };
 
-export const intro = {
-  status: "SYSTEM STATUS — CHARTING",
-  cta: "Begin the Chart",
-  skip: "Skip to the chart",
-  lines: [
-    "Every system starts as an unmapped territory.",
-    "This is a chart of what's been built, retrieved, and verified.",
-  ],
-};
+export type LocationId = "house" | "studio" | "archive" | "lab" | "university" | "theatre";
 
-export type BearingId = "engineer" | "workshop" | "instruments" | "archive" | "log" | "signal";
-
-export const bearings: {
-  id: BearingId;
-  heading: string; // compass heading e.g. "000°"
+export const locations: {
+  id: LocationId;
   label: string;
-  subtitle: string;
-  fragment: string;
-  angle: number; // degrees, 0 = N, clockwise
+  prompt: string;
+  position: [number, number, number];
 }[] = [
-  {
-    id: "engineer",
-    heading: "000°",
-    label: "The Engineer",
-    subtitle: "About",
-    fragment: "Where the chart begins.",
-    angle: 0,
-  },
-  {
-    id: "workshop",
-    heading: "060°",
-    label: "The Workshop",
-    subtitle: "Projects",
-    fragment: "Three systems, built and rebuilt.",
-    angle: 60,
-  },
-  {
-    id: "instruments",
-    heading: "120°",
-    label: "The Instruments",
-    subtitle: "Skills",
-    fragment: "What this engineer navigates with.",
-    angle: 120,
-  },
-  {
-    id: "archive",
-    heading: "180°",
-    label: "The Archive",
-    subtitle: "Open Source",
-    fragment: "Marks left in other people's charts.",
-    angle: 180,
-  },
-  {
-    id: "log",
-    heading: "240°",
-    label: "The Log",
-    subtitle: "Experience & Education",
-    fragment: "Entries from the voyage so far.",
-    angle: 240,
-  },
-  {
-    id: "signal",
-    heading: "300°",
-    label: "The Signal",
-    subtitle: "Contact",
-    fragment: "A frequency, left open.",
-    angle: 300,
-  },
+  { id: "house", label: "The House", prompt: "MEET NEHA →", position: [-9, 0, 3] },
+  { id: "studio", label: "The Studio", prompt: "SEE THE PROJECTS →", position: [-4, 0, -5] },
+  { id: "university", label: "The University", prompt: "EDUCATION →", position: [1, 0, 4] },
+  { id: "lab", label: "The Lab", prompt: "SKILLS & TOOLS →", position: [8, 0, -3] },
+  { id: "archive", label: "The Archive", prompt: "OPEN SOURCE →", position: [4, 0, -10] },
+  { id: "theatre", label: "The Theatre", prompt: "WATCH THE STORY →", position: [-1, 0, -19] },
 ];
 
 export const about = {
-  fragment: "Where the chart begins.",
-  body: "Final-year CSE student specializing in AI Engineering, production RAG systems, and LLM application development. Built and deployed ASTRA, an AI Academic Advisor, and CheckMyNotes. Strong Python fundamentals with experience in vector databases, embeddings, LangGraph orchestration, and cloud deployment.",
-  notes: [
+  points: [
     "Strong Python fundamentals",
     "RAG and LLM applications",
     "Vector databases and embeddings",
@@ -93,68 +38,16 @@ export const about = {
   ],
 };
 
-export type SkillCategory = {
-  id: string;
-  label: string;
-  skills: string[];
-};
-
-export const skillCategories: SkillCategory[] = [
-  {
-    id: "ai-llm",
-    label: "AI / LLM",
-    skills: [
-      "LangChain",
-      "LangGraph",
-      "RAG Pipelines",
-      "Corrective RAG",
-      "Prompt Engineering",
-      "LLM Evaluation",
-      "FAISS",
-      "ChromaDB",
-      "Groq API",
-      "LLaMA 3.3 70B",
-      "HuggingFace Transformers",
-      "Embeddings",
-      "Machine Learning",
-    ],
-  },
-  {
-    id: "backend",
-    label: "Backend & Languages",
-    skills: ["Python (Primary)", "FastAPI", "Pydantic v2", "C", "C++", "Java"],
-  },
-  {
-    id: "databases",
-    label: "Databases",
-    skills: ["PostgreSQL", "MySQL", "MongoDB", "FAISS", "ChromaDB"],
-  },
-  {
-    id: "cloud",
-    label: "Cloud & Tools",
-    skills: ["Git", "GitHub Actions", "AWS EC2", "Docker", "Streamlit Cloud", "Render"],
-  },
-  {
-    id: "nlp-ml",
-    label: "NLP / ML",
-    skills: ["NLTK", "spaCy", "Pandas", "Matplotlib", "PyMuPDF"],
-  },
-];
-
 export type Project = {
   id: string;
-  chartName: string;
   title: string;
   tagline: string;
-  fragment: string;
   description: string;
   architecture: string;
   decisions: string[];
   technologies: string[];
   features: string[];
-  route?: string[];
-  accent: "brass" | "amber" | "teal";
-  layout: "route" | "notebook" | "map";
+  stages?: string[];
   github?: string;
   demo?: string;
 };
@@ -162,10 +55,8 @@ export type Project = {
 export const projects: Project[] = [
   {
     id: "astra",
-    chartName: "ASTRA",
     title: "ASTRA",
     tagline: "Self-Correcting RAG Research Assistant",
-    fragment: "A route that checks its own bearing before arriving.",
     description:
       "A Corrective RAG research assistant built over arXiv paper abstracts. The system generates answers grounded in retrieved sources and independently fact-checks each answer using a second, separate LLM call.",
     architecture:
@@ -188,25 +79,19 @@ export const projects: Project[] = [
     features: [
       "Corrective RAG pipeline",
       "Self-correcting LangGraph agent",
-      "Conditional retry logic",
-      "Capped retry loop with a maximum of 2 attempts",
+      "Conditional retry logic, capped at 2 attempts",
       "Source-grounded answer generation",
       "Independent answer verification",
-      "arXiv ingestion and chunking",
-      "Embeddings and vector storage",
+      "arXiv ingestion, chunking, and embedding",
       "FastAPI backend",
     ],
-    route: ["Ingest", "Chunk", "Embed", "Retrieve", "Generate", "Verify", "Correct"],
-    accent: "brass",
-    layout: "route",
+    stages: ["Question", "Retrieval", "Generation", "Verification", "Correction"],
     github: "https://github.com/BiswasNehaa/Astra",
   },
   {
     id: "checkmynotes",
-    chartName: "CheckMyNotes",
     title: "CheckMyNotes",
     tagline: "AI Notebook Grading Web App",
-    fragment: "Marginalia, written by a model instead of a teacher.",
     description:
       "A full-stack AI application that evaluates handwritten notebook pages using multimodal vision models and returns per-step correctness checks with pinpointed mistake coordinates.",
     architecture:
@@ -219,28 +104,21 @@ export const projects: Project[] = [
     technologies: ["Python", "FastAPI", "React", "Vite", "Groq Vision LLMs", "SQLite", "PyMuPDF"],
     features: [
       "Handwritten notebook image evaluation",
-      "Multimodal AI vision analysis",
       "Per-step correctness checks",
       "Mistake coordinate detection",
       "Exponential-backoff retries",
       "Offline fallback engine",
-      "FastAPI + SQLite backend",
-      "React + Vite frontend",
-      "Zoomable notebook viewer",
-      "Interactive mistake-pin overlays",
+      "Zoomable notebook viewer with mistake-pin overlays",
       "PDF export for single-day and merged semester documents",
     ],
-    accent: "amber",
-    layout: "notebook",
+    stages: ["Handwritten Page", "Vision Analysis", "Mistake Detection", "Feedback"],
     github: "https://github.com/BiswasNehaa/CheckMyNotes",
     demo: "https://acadine-frontend.onrender.com",
   },
   {
     id: "advisor",
-    chartName: "AI Academic Advisor",
     title: "AI Academic Advisor",
     tagline: "RAG-Based Academic Recommendation System",
-    fragment: "A map of courses, drawn from where you want to end up.",
     description:
       "An end-to-end RAG system that recommends courses based on career goals, completed courses, and credit limits.",
     architecture:
@@ -254,63 +132,37 @@ export const projects: Project[] = [
     features: [
       "Career goal-based course recommendations",
       "FAISS semantic search",
-      "LLaMA 3.3 70B via Groq",
       "Prerequisite validation",
       "Credit limit handling",
       "Streamlit Cloud deployment",
       "Pydantic v2 input/output schema validation",
     ],
-    route: ["Career Goal", "Skill Mapping", "Course Retrieval", "Prerequisite Validation", "Recommendation"],
-    accent: "teal",
-    layout: "map",
+    stages: ["Career Goal", "Course Retrieval", "Prerequisite Check", "Recommendation"],
     github: "https://github.com/BiswasNehaa/universal-academic-advisor",
     demo: "https://ai-academic-rag-based-system.streamlit.app/",
   },
 ];
 
 export const openSource = {
-  fragment: "Marks left in other people's charts.",
   summary: "Active contributor with 19+ merged/opened pull requests across open-source AI and developer tooling.",
   maintainer: "Maintainer of ASTRA, an MIT-licensed open-source project with contributor documentation.",
   repos: [
-    {
-      name: "i-am-bee/beeai-framework",
-      org: "IBM",
-      description: "Bug fixes and a 29-file model migration.",
-      url: "https://github.com/i-am-bee/beeai-framework",
-    },
-    {
-      name: "adam2go/tilo-framework",
-      org: "adam2go",
-      description: "Semantic embedding support in the memory pipeline.",
-      url: "https://github.com/adam2go/tilo-framework",
-    },
-    {
-      name: "matplotlib",
-      org: "matplotlib",
-      description: "Core rendering-bug fix.",
-      url: "https://github.com/matplotlib/matplotlib",
-    },
-    {
-      name: "JohannsenLum/canvas-api-mcp",
-      org: "JohannsenLum",
-      description: "Contribution to canvas-api-mcp.",
-      url: "https://github.com/JohannsenLum/canvas-api-mcp",
-    },
-    {
-      name: "py-pdf/pypdf",
-      org: "py-pdf",
-      description: "Contribution to pypdf.",
-      url: "https://github.com/py-pdf/pypdf",
-    },
-    {
-      name: "taksh1507/secret-guard",
-      org: "taksh1507",
-      description: "6 merged pull requests.",
-      url: "https://github.com/taksh1507/secret-guard",
-    },
+    { name: "i-am-bee/beeai-framework", org: "IBM", description: "Bug fixes and a 29-file model migration.", url: "https://github.com/i-am-bee/beeai-framework" },
+    { name: "adam2go/tilo-framework", org: "adam2go", description: "Semantic embedding support in the memory pipeline.", url: "https://github.com/adam2go/tilo-framework" },
+    { name: "matplotlib", org: "matplotlib", description: "Core rendering-bug fix.", url: "https://github.com/matplotlib/matplotlib" },
+    { name: "JohannsenLum/canvas-api-mcp", org: "JohannsenLum", description: "Contribution to canvas-api-mcp.", url: "https://github.com/JohannsenLum/canvas-api-mcp" },
+    { name: "py-pdf/pypdf", org: "py-pdf", description: "Contribution to pypdf.", url: "https://github.com/py-pdf/pypdf" },
+    { name: "taksh1507/secret-guard", org: "taksh1507", description: "6 merged pull requests.", url: "https://github.com/taksh1507/secret-guard" },
   ],
 };
+
+export const skillCategories: { label: string; skills: string[] }[] = [
+  { label: "AI / LLM", skills: ["LangChain", "LangGraph", "RAG Pipelines", "Corrective RAG", "Prompt Engineering", "LLM Evaluation", "FAISS", "ChromaDB", "Groq API", "LLaMA 3.3 70B", "HuggingFace Transformers", "Embeddings", "Machine Learning"] },
+  { label: "Backend & Languages", skills: ["Python (Primary)", "FastAPI", "Pydantic v2", "C", "C++", "Java"] },
+  { label: "Databases", skills: ["PostgreSQL", "MySQL", "MongoDB", "FAISS", "ChromaDB"] },
+  { label: "Cloud & Tools", skills: ["Git", "GitHub Actions", "AWS EC2", "Docker", "Streamlit Cloud", "Render"] },
+  { label: "NLP / ML", skills: ["NLTK", "spaCy", "Pandas", "Matplotlib", "PyMuPDF"] },
+];
 
 export const experience = [
   {
@@ -325,34 +177,23 @@ export const experience = [
 ];
 
 export const education = [
-  {
-    degree: "B.E. in Computer Science and Engineering",
-    school: "Acharya Institute of Technology, Bangalore",
-    detail: "CGPA: 8.6 / 10",
-  },
-  {
-    degree: "Higher Secondary (PCMC)",
-    school: "Aditya Educational Institute",
-    detail: "83%",
-  },
-  {
-    degree: "Secondary Education",
-    school: "Jawahar Navodaya Vidyalaya",
-    detail: "90.4%",
-  },
+  { degree: "B.E. in Computer Science and Engineering", school: "Acharya Institute of Technology, Bangalore", detail: "CGPA: 8.6 / 10" },
+  { degree: "Higher Secondary (PCMC)", school: "Aditya Educational Institute", detail: "83%" },
+  { degree: "Secondary Education", school: "Jawahar Navodaya Vidyalaya", detail: "90.4%" },
 ];
 
-export const coursework = [
-  "Operating Systems",
-  "Computer Networks",
-  "DBMS",
-  "Data Structures & Algorithms",
-  "OOP",
-  "DevOps",
+export const coursework = ["Operating Systems", "Computer Networks", "DBMS", "Data Structures & Algorithms", "OOP", "DevOps"];
+
+export const filmCards = [
+  { title: "THE STORY OF A BUILDER", subtitle: "A portfolio, in one act" },
+  { title: "A student who kept building", body: "Final-year CSE, specializing in AI Engineering — RAG systems, LLM applications, agentic workflows." },
+  { title: "Three systems, shipped", body: "ASTRA. CheckMyNotes. The AI Academic Advisor. Each one built, broken, and rebuilt until it worked." },
+  { title: "19+ contributions, elsewhere", body: "IBM's BeeAI framework. tilo-framework. matplotlib. pypdf. secret-guard. Small fixes, left in other people's code." },
+  { title: "Still building.", body: "Open to AI Engineering opportunities, internships, and meaningful collaborations." },
 ];
 
-export const signal = {
-  fragment: "A frequency, left open.",
-  heading: "OPEN TO NEW COORDINATES.",
-  body: "I'm open to AI Engineering opportunities, internships, and meaningful collaborations involving RAG systems, LLM applications, and intelligent software.",
+export const credits = {
+  directedBy: "DIRECTED & BUILT BY",
+  name: "NEHA BISWAS",
+  role: "AI ENGINEER — RAG & LLM SYSTEMS",
 };

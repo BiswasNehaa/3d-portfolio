@@ -1,29 +1,39 @@
-# Neha Biswas — Chart of an AI Engineer
+# Neha Biswas — The World
 
-A cinematic, interactive portfolio for Neha Biswas, an AI Engineer specializing in production RAG systems,
-LLM applications, and agentic AI workflows. The site is built around a cartographic metaphor: an armillary
-sphere hero, a compass-rose navigation hub, and six "bearings" — distinct chapters for the engineer, the
-workshop (projects), the instruments (skills), the archive (open source), the log (experience & education),
-and the signal (contact).
+An explorable 3D portfolio for Neha Biswas, an AI Engineer specializing in production RAG systems, LLM
+applications, and agentic AI workflows. Instead of a scrolling page, the site is a small stylized district
+built from six locations — buildings the visitor clicks to travel toward, each revealing a different part
+of the story. The journey ends at a theatre, which plays a short title-card "film" and closes on the
+credits: contact.
 
 ## Stack
 
 - React + TypeScript + Vite
 - Tailwind CSS v4
-- React Three Fiber / Three.js (hero armillary sphere)
-- Framer Motion (kinetic typography, magnetic buttons, scene transitions)
+- React Three Fiber / Three.js (the 3D world, cinematic camera rig, bounded OrbitControls)
+- Framer Motion (title reveals, panel transitions, the theatre sequence)
 
-## Structure
+## The world
 
-- **Intro** — kinetic headline reveal over a rotating 3D armillary sphere
-- **The Chart (hub)** — a compass-rose navigation model on desktop, a stacked list on mobile
-- **The Engineer** — about
-- **The Workshop** — three project "charts" (ASTRA, CheckMyNotes, AI Academic Advisor), each with its
-  own visual treatment: a route/pipeline diagram, an annotated notebook layout, or a course map
-- **The Instruments** — skills, grouped by category
-- **The Archive** — open-source contributions
-- **The Log** — experience & education
-- **The Signal** — contact
+| Location | Represents |
+| --- | --- |
+| **The House** | About |
+| **The Studio** | Projects — ASTRA, CheckMyNotes, AI Academic Advisor |
+| **The University** | Education & experience |
+| **The Lab** | Skills, grouped by category |
+| **The Archive** | Open-source contributions |
+| **The Theatre** | The finale — a title-card sequence closing on contact info |
+
+On load, the camera performs a slow establishing descent into the district. Clicking a building travels
+the camera toward it and opens a content panel; a small persistent nav at the bottom (and a "back to the
+world" control) always gets you home. Between locations, dragging orbits the camera within bounded limits
+— it never turns into a free-roam game camera.
+
+## Mobile
+
+Below 768px (or without WebGL), the 3D world is replaced by `MobileJourney`: the same six locations and
+the same theatre finale, presented as a guided vertical flow instead of a 3D scene the device can't drive
+well.
 
 ## Getting started
 
@@ -40,6 +50,8 @@ npm run build
 
 ## Accessibility & performance notes
 
-- The 3D scene only mounts when WebGL is available, with a gradient CSS fallback otherwise.
-- Camera motion and kinetic type respect `prefers-reduced-motion`.
-- Every scene has a persistent home control, a current-location label, and an accessible text-based menu.
+- The 3D world is code-split and only downloaded on desktop with WebGL support; everyone else gets the
+  mobile journey instead.
+- Camera travel snaps instantly instead of animating when `prefers-reduced-motion` is set.
+- All location content is real HTML (readable, selectable, screen-reader friendly) layered over the 3D
+  canvas — nothing important lives only inside the WebGL scene.

@@ -1,57 +1,62 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useScene } from "./state/useScene";
-import type { SceneId } from "./state/useScene";
-import TopBar from "./components/ui/TopBar";
-import Intro from "./components/scenes/Intro";
-import Hub from "./components/scenes/Hub";
-import Engineer from "./components/scenes/Engineer";
-import Workshop from "./components/scenes/Workshop";
-import ProjectWorld from "./components/scenes/ProjectWorld";
-import Instruments from "./components/scenes/Instruments";
-import Archive from "./components/scenes/Archive";
-import Log from "./components/scenes/Log";
-import Signal from "./components/scenes/Signal";
+import { useEffect, useState, Suspense, lazy } from "react";
+import type { LocationId } from "./data/content";
+import { useReducedMotion } from "./hooks/useReducedMotion";
+import { useWebGLSupport } from "./hooks/useWebGLSupport";
+import { useIsMobile } from "./hooks/useIsMobile";
+import IntroTitle from "./components/IntroTitle";
+import MiniNav from "./components/MiniNav";
+import LocationPanel from "./components/LocationPanel";
+import TheatreSequence from "./components/TheatreSequence";
+import MobileJourney from "./components/MobileJourney";
 
-function App() {
-  const { scene, go, visited } = useScene();
-  const toHub = () => go("hub");
+const World = lazy(() => import("./three/World"));
+
+function DesktopWorld() {
+  const [selected, setSelected] = useState<LocationId | null>(null);
+  const [theatreActive, setTheatreActive] = useState(false);
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (selected === "theatre") {
+      const t = setTimeout(() => setTheatreActive(true), reducedMotion ? 150 : 1400);
+      return () => clearTimeout(t);
+    }
+    setTheatreActive(false);
+  }, [selected, reducedMotion]);
 
   return (
-    <div className="grain min-h-screen bg-ink">
-      {scene !== "intro" && <TopBar scene={scene} go={go} />}
+    <div className="film-grain fixed inset-0 bg-charcoal-deep">
+      <Suspense fallback={null}>
+        <World selected={selected} onSelect={setSelected} reducedMotion={reducedMotion} />
+      </Suspense>
 
-      <AnimatePresence mode="wait">
-        {scene === "intro" && (
-          <motion.div key="intro" exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
-            <Intro onEnter={toHub} />
-          </motion.div>
-        )}
+      <IntroTitle dismissed={!!selected} />
 
-        {scene === "hub" && (
-          <motion.div
-            key="hub"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            <Hub go={(id) => go(id)} visited={visited} />
-          </motion.div>
-        )}
+      <LocationPanel selected={selected} onClose={() => setSelected(null)} />
 
-        {scene === "engineer" && <Engineer key="engineer" onBack={toHub} />}
-        {scene === "workshop" && <Workshop key="workshop" go={(s: SceneId) => go(s)} onBack={toHub} />}
-        {scene === "instruments" && <Instruments key="instruments" onBack={toHub} />}
-        {scene === "archive" && <Archive key="archive" onBack={toHub} />}
-        {scene === "log" && <Log key="log" onBack={toHub} />}
-        {scene === "signal" && <Signal key="signal" onBack={toHub} />}
+      {theatreActive && (
+        <TheatreSequence
+          onClose={() => {
+            setTheatreActive(false);
+            setSelected(null);
+          }}
+        />
+      )}
 
-        {scene.startsWith("project:") && (
-          <ProjectWorld key={scene} projectId={scene.split(":")[1]} onBack={() => go("workshop")} />
-        )}
-      </AnimatePresence>
+      {!theatreActive && <MiniNav selected={selected} onSelect={setSelected} onHome={() => setSelected(null)} />}
     </div>
   );
+}
+
+function App() {
+  const isMobile = useIsMobile();
+  const webglSupported = useWebGLSupport();
+
+  if (isMobile || !webglSupported) {
+    return <MobileJourney />;
+  }
+
+  return <DesktopWorld />;
 }
 
 export default App;
