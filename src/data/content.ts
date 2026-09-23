@@ -1,78 +1,86 @@
 export const profile = {
   name: "Neha Biswas",
-  role: "AI Engineer | RAG & LLM Systems | Final-Year CSE Student",
+  role: "AI Engineer",
+  roleLine: "RAG & LLM Systems — Final-Year CSE Student",
+  description:
+    "Final-year Computer Science Engineering student specializing in AI Engineering, production RAG systems, and LLM application development.",
   email: "itsnehab.official@gmail.com",
   github: "https://github.com/BiswasNehaa",
   linkedin: "https://www.linkedin.com/in/neha-biswas-/",
 };
 
 export const intro = {
-  title: "THE UNFINISHED MACHINE",
-  byline: "A portfolio by Neha Biswas",
+  status: "SYSTEM STATUS — CHARTING",
+  cta: "Begin the Chart",
+  skip: "Skip to the chart",
   lines: [
-    "Somewhere between a question and a working system, something begins.",
-    "This machine is unfinished. You can explore it anyway.",
-    "Every system starts with curiosity.",
+    "Every system starts as an unmapped territory.",
+    "This is a chart of what's been built, retrieved, and verified.",
   ],
-  cta: "START EXPLORATION",
-  skip: "Skip intro",
 };
 
-export type RoomId = "person" | "workshop" | "mind" | "archive" | "fieldnotes" | "contact";
+export type BearingId = "engineer" | "workshop" | "instruments" | "archive" | "log" | "signal";
 
-export const rooms: {
-  id: RoomId;
-  number: string;
-  name: string;
+export const bearings: {
+  id: BearingId;
+  heading: string; // compass heading e.g. "000°"
+  label: string;
   subtitle: string;
   fragment: string;
+  angle: number; // degrees, 0 = N, clockwise
 }[] = [
   {
-    id: "person",
-    number: "01",
-    name: "The Person",
+    id: "engineer",
+    heading: "000°",
+    label: "The Engineer",
     subtitle: "About",
-    fragment: "Before the machine, there was a question.",
+    fragment: "Where the chart begins.",
+    angle: 0,
   },
   {
     id: "workshop",
-    number: "02",
-    name: "The Workshop",
+    heading: "060°",
+    label: "The Workshop",
     subtitle: "Projects",
-    fragment: "Where the parts get built, tested, and corrected.",
+    fragment: "Three systems, built and rebuilt.",
+    angle: 60,
   },
   {
-    id: "mind",
-    number: "03",
-    name: "The Mind",
+    id: "instruments",
+    heading: "120°",
+    label: "The Instruments",
     subtitle: "Skills",
-    fragment: "The instruments this engineer reaches for.",
+    fragment: "What this engineer navigates with.",
+    angle: 120,
   },
   {
     id: "archive",
-    number: "04",
-    name: "The Contribution Archive",
+    heading: "180°",
+    label: "The Archive",
     subtitle: "Open Source",
-    fragment: "Small fixes, left in other people's machines.",
+    fragment: "Marks left in other people's charts.",
+    angle: 180,
   },
   {
-    id: "fieldnotes",
-    number: "05",
-    name: "The Field Notes",
+    id: "log",
+    heading: "240°",
+    label: "The Log",
     subtitle: "Experience & Education",
-    fragment: "What was learned, and where.",
+    fragment: "Entries from the voyage so far.",
+    angle: 240,
   },
   {
-    id: "contact",
-    number: "06",
-    name: "The Communication Room",
+    id: "signal",
+    heading: "300°",
+    label: "The Signal",
     subtitle: "Contact",
-    fragment: "A channel, left open.",
+    fragment: "A frequency, left open.",
+    angle: 300,
   },
 ];
 
 export const about = {
-  fragment: "Before the machine, there was a question.",
+  fragment: "Where the chart begins.",
   body: "Final-year CSE student specializing in AI Engineering, production RAG systems, and LLM application development. Built and deployed ASTRA, an AI Academic Advisor, and CheckMyNotes. Strong Python fundamentals with experience in vector databases, embeddings, LangGraph orchestration, and cloud deployment.",
   notes: [
     "Strong Python fundamentals",
@@ -135,7 +143,7 @@ export const skillCategories: SkillCategory[] = [
 
 export type Project = {
   id: string;
-  worldName: string;
+  chartName: string;
   title: string;
   tagline: string;
   fragment: string;
@@ -144,8 +152,9 @@ export type Project = {
   decisions: string[];
   technologies: string[];
   features: string[];
-  pipeline?: string[];
-  accent: "blue" | "red" | "ink";
+  route?: string[];
+  accent: "brass" | "amber" | "teal";
+  layout: "route" | "notebook" | "map";
   github?: string;
   demo?: string;
 };
@@ -153,14 +162,14 @@ export type Project = {
 export const projects: Project[] = [
   {
     id: "astra",
-    worldName: "ASTRA: The Self-Correcting Machine",
+    chartName: "ASTRA",
     title: "ASTRA",
     tagline: "Self-Correcting RAG Research Assistant",
-    fragment: "A machine that checks its own work before it speaks.",
+    fragment: "A route that checks its own bearing before arriving.",
     description:
       "A Corrective RAG research assistant built over arXiv paper abstracts. The system generates answers grounded in retrieved sources and independently fact-checks each answer using a second, separate LLM call.",
     architecture:
-      "Documents are ingested from the arXiv API, chunked, embedded with BAAI/bge-small-en-v1.5, and stored in ChromaDB. A LangGraph agent retrieves relevant chunks, generates a grounded answer with Groq LLaMA 3.3, then hands that answer to an independent verification call. If the verifier flags it unsupported, the graph loops back through a corrective retry — capped at 2 attempts — before returning a final, source-grounded answer via FastAPI.",
+      "Documents are ingested from the arXiv API, chunked, embedded with HuggingFace embeddings, and stored in ChromaDB. A LangGraph agent retrieves relevant chunks, generates a grounded answer with Groq LLaMA 3.3, then hands that answer to an independent verification call. If the verifier flags it unsupported, the graph loops back through a corrective retry — capped at 2 attempts — before returning a final, source-grounded answer via FastAPI.",
     decisions: [
       "Verification runs as a separate LLM call, not a self-critique in the same context — keeps the check honest.",
       "Retry logic is conditional and capped at 2 attempts, so the graph can't loop forever on a stubborn question.",
@@ -172,7 +181,6 @@ export const projects: Project[] = [
       "Groq LLaMA 3.3",
       "LangGraph",
       "HuggingFace Embeddings",
-      "BAAI/bge-small-en-v1.5",
       "ChromaDB",
       "arXiv API",
       "Docker",
@@ -188,16 +196,17 @@ export const projects: Project[] = [
       "Embeddings and vector storage",
       "FastAPI backend",
     ],
-    pipeline: ["Ingest", "Chunk", "Embed", "Retrieve", "Generate", "Verify", "Corrective Retry"],
-    accent: "blue",
+    route: ["Ingest", "Chunk", "Embed", "Retrieve", "Generate", "Verify", "Correct"],
+    accent: "brass",
+    layout: "route",
     github: "https://github.com/BiswasNehaa/Astra",
   },
   {
     id: "checkmynotes",
-    worldName: "CheckMyNotes: The Living Notebook",
+    chartName: "CheckMyNotes",
     title: "CheckMyNotes",
     tagline: "AI Notebook Grading Web App",
-    fragment: "A notebook that reads handwriting and marks its own margins.",
+    fragment: "Marginalia, written by a model instead of a teacher.",
     description:
       "A full-stack AI application that evaluates handwritten notebook pages using multimodal vision models and returns per-step correctness checks with pinpointed mistake coordinates.",
     architecture:
@@ -221,15 +230,16 @@ export const projects: Project[] = [
       "Interactive mistake-pin overlays",
       "PDF export for single-day and merged semester documents",
     ],
-    accent: "red",
+    accent: "amber",
+    layout: "notebook",
     github: "https://github.com/BiswasNehaa/CheckMyNotes",
     demo: "https://acadine-frontend.onrender.com",
   },
   {
     id: "advisor",
-    worldName: "The Academic Compass",
+    chartName: "AI Academic Advisor",
     title: "AI Academic Advisor",
-    tagline: "RAG System",
+    tagline: "RAG-Based Academic Recommendation System",
     fragment: "A map of courses, drawn from where you want to end up.",
     description:
       "An end-to-end RAG system that recommends courses based on career goals, completed courses, and credit limits.",
@@ -250,15 +260,16 @@ export const projects: Project[] = [
       "Streamlit Cloud deployment",
       "Pydantic v2 input/output schema validation",
     ],
-    pipeline: ["Career Goal", "Skill Mapping", "Course Retrieval", "Prerequisite Validation", "Recommendations"],
-    accent: "ink",
+    route: ["Career Goal", "Skill Mapping", "Course Retrieval", "Prerequisite Validation", "Recommendation"],
+    accent: "teal",
+    layout: "map",
     github: "https://github.com/BiswasNehaa/universal-academic-advisor",
     demo: "https://ai-academic-rag-based-system.streamlit.app/",
   },
 ];
 
 export const openSource = {
-  fragment: "Small fixes, left in other people's machines.",
+  fragment: "Marks left in other people's charts.",
   summary: "Active contributor with 19+ merged/opened pull requests across open-source AI and developer tooling.",
   maintainer: "Maintainer of ASTRA, an MIT-licensed open-source project with contributor documentation.",
   repos: [
@@ -340,8 +351,8 @@ export const coursework = [
   "DevOps",
 ];
 
-export const contact = {
-  fragment: "A channel, left open.",
-  heading: "THE MACHINE IS STILL LEARNING.",
+export const signal = {
+  fragment: "A frequency, left open.",
+  heading: "OPEN TO NEW COORDINATES.",
   body: "I'm open to AI Engineering opportunities, internships, and meaningful collaborations involving RAG systems, LLM applications, and intelligent software.",
 };

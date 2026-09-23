@@ -1,56 +1,104 @@
 import { motion } from "framer-motion";
-import { rooms, profile } from "../../data/content";
-import type { RoomId } from "../../data/content";
-import RoomIcon from "../ui/RoomIcon";
+import { bearings, profile } from "../../data/content";
+import type { BearingId } from "../../data/content";
+import BearingIcon from "../ui/BearingIcon";
 
-const tilt = [-2, 1.5, -1, 2, -1.5, 1];
+function polarPosition(angleDeg: number, radiusPct: number) {
+  const rad = (angleDeg * Math.PI) / 180;
+  const x = 50 + radiusPct * Math.sin(rad);
+  const y = 50 - radiusPct * Math.cos(rad);
+  return { left: `${x}%`, top: `${y}%` };
+}
 
-export default function Hub({ go, visited }: { go: (id: RoomId) => void; visited: Set<string> }) {
+export default function Hub({ go, visited }: { go: (id: BearingId) => void; visited: Set<string> }) {
   return (
-    <section className="relative min-h-screen pt-28 pb-24 px-5 md:px-8 bg-cream bg-blueprint">
-      <div className="max-w-5xl mx-auto">
+    <section className="relative min-h-screen pt-28 pb-24 px-5 md:px-8 bg-ink bg-chart overflow-hidden">
+      <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-14"
+          className="mb-14 max-w-2xl"
         >
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-blue mb-3">The World</p>
-          <h1 className="font-display font-semibold text-3xl md:text-5xl leading-tight max-w-2xl">
-            {profile.name} is building a machine. It isn&rsquo;t finished. Walk through it.
+          <p className="font-mono text-xs uppercase tracking-[0.3em] text-brass mb-3">The Chart</p>
+          <h1 className="font-display font-semibold text-3xl md:text-5xl leading-tight text-cream">
+            {profile.name} is charting a body of work. Pick a bearing.
           </h1>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-          {rooms.map((room, i) => (
-            <motion.button
-              key={room.id}
-              onClick={() => go(room.id)}
-              initial={{ opacity: 0, y: 20, rotate: 0 }}
-              animate={{ opacity: 1, y: 0, rotate: tilt[i % tilt.length] }}
-              whileHover={{ rotate: 0, y: -4, scale: 1.02 }}
-              transition={{ duration: 0.45, delay: i * 0.06 }}
-              className="focus-ring group relative text-left rounded-2xl border border-line bg-paper/70 p-6 hover:border-blue hover:bg-paper transition-colors shadow-[0_2px_0_rgba(27,23,16,0.06)]"
-            >
-              <div className="flex items-start justify-between mb-8">
-                <span className="font-mono text-xs text-muted">{room.number}</span>
-                {visited.has(room.id) && (
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-blue">visited</span>
+        {/* Desktop compass */}
+        <div className="hidden md:block relative mx-auto" style={{ width: "min(640px, 90vw)", aspectRatio: "1" }}>
+          <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full" aria-hidden="true">
+            <circle cx="50" cy="50" r="46" fill="none" stroke="#2b2f37" strokeWidth="0.3" />
+            <circle cx="50" cy="50" r="32" fill="none" stroke="#2b2f37" strokeWidth="0.3" />
+            <circle cx="50" cy="50" r="1" fill="#c9a24b" />
+            {bearings.map((b) => {
+              const inner = polarPosition(b.angle, 0);
+              const outer = polarPosition(b.angle, 46);
+              return (
+                <line
+                  key={b.id}
+                  x1={inner.left.replace("%", "")}
+                  y1={inner.top.replace("%", "")}
+                  x2={outer.left.replace("%", "")}
+                  y2={outer.top.replace("%", "")}
+                  stroke="#2b2f37"
+                  strokeWidth="0.25"
+                />
+              );
+            })}
+          </svg>
+
+          {bearings.map((b, i) => {
+            const pos = polarPosition(b.angle, 46);
+            return (
+              <motion.button
+                key={b.id}
+                onClick={() => go(b.id)}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.2 + i * 0.06 }}
+                className="focus-ring group absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 w-36"
+                style={pos}
+              >
+                <span className="font-mono text-[10px] text-muted group-hover:text-brass-bright transition-colors">
+                  {b.heading}
+                </span>
+                <span className="w-14 h-14 rounded-full border border-line bg-panel flex items-center justify-center group-hover:border-brass group-hover:bg-panel-soft transition-colors">
+                  <BearingIcon id={b.id} className="w-6 h-6 text-cream stroke-current group-hover:text-brass-bright transition-colors" />
+                </span>
+                <span className="font-display text-base text-cream group-hover:text-brass-bright transition-colors text-center leading-tight">
+                  {b.label}
+                </span>
+                {visited.has(b.id) && (
+                  <span className="font-mono text-[9px] uppercase tracking-widest text-brass">visited</span>
                 )}
-              </div>
+              </motion.button>
+            );
+          })}
+        </div>
 
-              <RoomIcon
-                id={room.id}
-                className="w-10 h-10 mb-6 text-ink stroke-current group-hover:text-blue transition-colors"
-              />
-
-              <h2 className="font-display font-semibold text-2xl mb-1">{room.name}</h2>
-              <p className="font-mono text-[11px] uppercase tracking-widest text-muted mb-4">{room.subtitle}</p>
-              <p className="text-sm text-ink-soft italic">{room.fragment}</p>
-
-              <span className="mt-6 inline-block font-mono text-xs text-muted group-hover:text-blue transition-colors">
-                enter &rarr;
+        {/* Mobile list */}
+        <div className="md:hidden flex flex-col gap-3">
+          {bearings.map((b, i) => (
+            <motion.button
+              key={b.id}
+              onClick={() => go(b.id)}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: i * 0.06 }}
+              className="focus-ring group flex items-center gap-4 rounded-xl border border-line bg-panel p-4 text-left"
+            >
+              <span className="w-11 h-11 shrink-0 rounded-full border border-line bg-panel-soft flex items-center justify-center">
+                <BearingIcon id={b.id} className="w-5 h-5 text-brass stroke-current" />
               </span>
+              <span>
+                <span className="block font-mono text-[10px] text-muted">
+                  {b.heading} — {b.subtitle}
+                </span>
+                <span className="block font-display text-lg text-cream">{b.label}</span>
+              </span>
+              <span className="ml-auto font-mono text-xs text-muted">&rarr;</span>
             </motion.button>
           ))}
         </div>

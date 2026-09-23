@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
-import type { RoomId } from "../data/content";
+import type { BearingId } from "../data/content";
 
-export type SceneId = "intro" | "hub" | RoomId | `project:${string}`;
+export type SceneId = "intro" | "hub" | BearingId | `project:${string}`;
 
 export function useScene() {
   const [scene, setScene] = useState<SceneId>("intro");
