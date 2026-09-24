@@ -24,10 +24,12 @@ credits: contact.
 | **The Archive** | Open-source contributions |
 | **The Theatre** | The finale — a title-card sequence closing on contact info |
 
-On load, the camera performs a slow establishing descent into the district. Clicking a building travels
-the camera toward it and opens a content panel; a small persistent nav at the bottom (and a "back to the
-world" control) always gets you home. Between locations, dragging orbits the camera within bounded limits
-— it never turns into a free-roam game camera.
+The district sits on undulating, hand-tuned terrain (a noise-displaced heightfield, flattened locally
+under each building and along the path) with a pond, gardens, benches, and varied trees, lit by a warm
+golden-hour directional light. On load, the camera dollies forward from a low, human-scale establishing
+shot. Clicking a building travels the camera toward it and opens a content panel; a small "Index" control
+in the corner (and a "back to the world" button) always gets you home. Between locations, dragging orbits
+the camera within bounded limits, close to the ground — it never turns into a top-down strategy camera.
 
 ## Mobile
 

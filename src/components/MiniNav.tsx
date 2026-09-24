@@ -1,38 +1,54 @@
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { locations } from "../data/content";
 import type { LocationId } from "../data/content";
 
 export default function MiniNav({
   selected,
   onSelect,
-  onHome,
 }: {
   selected: LocationId | null;
   onSelect: (id: LocationId) => void;
-  onHome: () => void;
 }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <nav
-      className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 rounded-full bg-charcoal-deep/70 backdrop-blur-sm border border-ivory/10 px-2 py-2"
-      aria-label="World locations"
-    >
+    <div className="fixed bottom-6 right-6 z-40">
       <button
-        onClick={onHome}
-        className="focus-ring font-mono text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-full text-ivory/70 hover:text-sun transition-colors"
+        onClick={() => setOpen((o) => !o)}
+        className="focus-ring font-mono text-[10px] uppercase tracking-[0.25em] text-ivory/60 hover:text-sun border border-ivory/15 rounded-full px-4 py-2 bg-charcoal-deep/40 backdrop-blur-sm transition-colors"
+        aria-expanded={open}
       >
-        World
+        {open ? "Close" : "Index"}
       </button>
-      {locations.map((loc) => (
-        <button
-          key={loc.id}
-          onClick={() => onSelect(loc.id)}
-          aria-current={selected === loc.id ? "location" : undefined}
-          className={`focus-ring font-mono text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-full transition-colors ${
-            selected === loc.id ? "bg-sun text-charcoal-deep" : "text-ivory/70 hover:text-sun"
-          }`}
-        >
-          {loc.label.replace("The ", "")}
-        </button>
-      ))}
-    </nav>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.2 }}
+            className="absolute bottom-12 right-0 w-52 rounded-xl border border-ivory/10 bg-charcoal-deep/85 backdrop-blur-sm p-2"
+          >
+            {locations.map((loc) => (
+              <button
+                key={loc.id}
+                onClick={() => {
+                  onSelect(loc.id);
+                  setOpen(false);
+                }}
+                aria-current={selected === loc.id ? "location" : undefined}
+                className={`focus-ring w-full text-left font-mono text-[11px] uppercase tracking-widest px-3 py-2 rounded-md transition-colors ${
+                  selected === loc.id ? "text-sun" : "text-ivory/70 hover:text-ivory"
+                }`}
+              >
+                {loc.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

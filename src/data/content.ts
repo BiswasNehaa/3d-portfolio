@@ -14,16 +14,18 @@ export type LocationId = "house" | "studio" | "archive" | "lab" | "university" |
 
 export const locations: {
   id: LocationId;
+  exhibit: string;
   label: string;
   prompt: string;
   position: [number, number, number];
+  rotation: number;
 }[] = [
-  { id: "house", label: "The House", prompt: "MEET NEHA →", position: [-9, 0, 3] },
-  { id: "studio", label: "The Studio", prompt: "SEE THE PROJECTS →", position: [-4, 0, -5] },
-  { id: "university", label: "The University", prompt: "EDUCATION →", position: [1, 0, 4] },
-  { id: "lab", label: "The Lab", prompt: "SKILLS & TOOLS →", position: [8, 0, -3] },
-  { id: "archive", label: "The Archive", prompt: "OPEN SOURCE →", position: [4, 0, -10] },
-  { id: "theatre", label: "The Theatre", prompt: "WATCH THE STORY →", position: [-1, 0, -19] },
+  { id: "house", exhibit: "EXHIBIT 01", label: "The House", prompt: "MEET NEHA →", position: [-10, 0, 6], rotation: 0.5 },
+  { id: "studio", exhibit: "EXHIBIT 02", label: "The Studio", prompt: "SEE THE PROJECTS →", position: [-3, 0, -7], rotation: -0.3 },
+  { id: "university", exhibit: "EXHIBIT 03", label: "The University", prompt: "EDUCATION →", position: [-9, 0, -15], rotation: 0.9 },
+  { id: "lab", exhibit: "EXHIBIT 04", label: "The Lab", prompt: "SKILLS & TOOLS →", position: [8, 0, -4], rotation: -0.7 },
+  { id: "archive", exhibit: "EXHIBIT 05", label: "The Archive", prompt: "OPEN SOURCE →", position: [6, 0, -16], rotation: 0.2 },
+  { id: "theatre", exhibit: "FINALE", label: "The Theatre", prompt: "WATCH THE STORY →", position: [-2, 0, -28], rotation: 0 },
 ];
 
 export const about = {

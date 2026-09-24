@@ -43,7 +43,7 @@ function DesktopWorld() {
         />
       )}
 
-      {!theatreActive && <MiniNav selected={selected} onSelect={setSelected} onHome={() => setSelected(null)} />}
+      {!theatreActive && <MiniNav selected={selected} onSelect={setSelected} />}
     </div>
   );
 }

@@ -7,6 +7,7 @@ import type { LocationId } from "../data/content";
 export default function Building({
   id,
   position,
+  rotation = 0,
   label,
   prompt,
   onSelect,
@@ -15,6 +16,7 @@ export default function Building({
 }: {
   id: LocationId;
   position: [number, number, number];
+  rotation?: number;
   label: string;
   prompt: string;
   onSelect: (id: LocationId) => void;
@@ -34,6 +36,7 @@ export default function Building({
     <group
       ref={group}
       position={position}
+      rotation={[0, rotation, 0]}
       onPointerOver={(e) => {
         e.stopPropagation();
         if (disabled) return;
